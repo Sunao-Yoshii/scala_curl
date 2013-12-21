@@ -2,12 +2,10 @@ package net.azalea.curl
 
 import org.apache.http.entity.{ContentType, FileEntity, StringEntity}
 import org.apache.http.client.utils.URIBuilder
-import org.apache.http.Consts
 import org.apache.http.message.BasicNameValuePair
 import org.apache.http.entity.mime.content._
 import org.apache.http.entity.mime.MultipartEntityBuilder
 import org.apache.http.HttpEntity
-import java.nio.charset.Charset
 
 object HTTPHelper {
   implicit class MapConversion(values: Map[String, ContentBody]) {

@@ -3,7 +3,6 @@ package net.azalea.curl
 import org.apache.http.impl.client.{DefaultRedirectStrategy, HttpClients}
 import org.apache.http.client.methods._
 import org.apache.http.protocol.HTTP._
-import org.apache.http.entity.mime.content._
 import org.apache.http._
 import org.apache.commons.io.IOUtils
 import scala.collection.JavaConversions._
@@ -16,7 +15,7 @@ import org.apache.http.client.protocol.HttpClientContext
 case class Response(response: HttpResponse) {
   private lazy val statusLine = response.getStatusLine
 
-  lazy val headers = response.getAllHeaders.map(h => h.getName -> h.getValue).toMap
+  lazy val headers:Map[String, String] = response.getAllHeaders.map(h => h.getName -> h.getValue).toMap
 
   private lazy val body = response.getEntity
 
