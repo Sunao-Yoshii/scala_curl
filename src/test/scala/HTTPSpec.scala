@@ -3,6 +3,15 @@ import javax.servlet.http.HttpServlet
 import net.azalea.curl.HTTP
 import org.specs2.mutable.Specification
 
+
+import org.scalatra.ScalatraServlet
+
+class SimpleGetServlet extends ScalatraServlet {
+  get("/") {
+    "Hello world!"
+  }
+}
+
 class HTTPSpecGet extends Specification {
   class SimpleGetBefore extends WithServer {
     def servlet = classOf[SimpleGetServlet]
