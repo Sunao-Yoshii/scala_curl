@@ -7,16 +7,16 @@ Only to use simply HTTP client access.
 
 method: `GET, PUT, DELETE`
 
-# Install
+## Install
 
 ```scala
   git clone https://github.com/Sunao-Yoshii/scala_curl.git
   sbt clean update publishLocal
 ```
 
-# Using
+## Using
 
-## Settings
+### Settings
 
   Definition `net.azalea.curl.RequestOption` instance to using scope.
 
@@ -31,7 +31,7 @@ method: `GET, PUT, DELETE`
 
   You can change with `clone` method.
 
-## GET
+### GET
 
   ```scala
     val response         = HTTP.get("http://localhost:8000")
@@ -43,7 +43,7 @@ method: `GET, PUT, DELETE`
 
   HTTP.get returns `net.azalea.curl.Response` instance.
 
-## PUT
+### PUT
 
   ```scala
     // PUT String contents.
@@ -66,7 +66,7 @@ method: `GET, PUT, DELETE`
 
   DSL is under construction.
 
-## URL helper
+### URL helper
 
   ```scala
     val localhost = "http" % "localhost" // "http://localhost" with toString method
@@ -76,7 +76,7 @@ method: `GET, PUT, DELETE`
     withParam.toString() // return "http://localhost/path/to?param1=value1"
   ```
 
-# WARNING
+## WARNING
 
   This library is not yet complete.
 
@@ -84,6 +84,6 @@ method: `GET, PUT, DELETE`
 
   Please be careful when using this library.
 
-# LICENSE
+## LICENSE
 
   ApacheCommons version 2
