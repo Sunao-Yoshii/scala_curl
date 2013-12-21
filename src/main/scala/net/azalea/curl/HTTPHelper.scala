@@ -6,9 +6,11 @@ import org.apache.http.message.BasicNameValuePair
 import org.apache.http.entity.mime.content._
 import org.apache.http.entity.mime.MultipartEntityBuilder
 import org.apache.http.HttpEntity
+import org.apache.http.client.entity.UrlEncodedFormEntity
+import scala.collection.JavaConversions._
 
 object HTTPHelper {
-  implicit class MapConversion(values: Map[String, ContentBody]) {
+  implicit class ConvertMultipart(values: Map[String, ContentBody]) {
     def toEntity():HttpEntity = {
       val builder = MultipartEntityBuilder.create()
       values.foreach {
@@ -18,13 +20,34 @@ object HTTPHelper {
     }
   }
 
-  implicit def entityConversion(value: String) = new {
-    def toEntity(mimeType:String = "plain/text")(implicit options: RequestOption = HTTP.options) =
-      new StringEntity(value, ContentType.create(mimeType, options.encoding))
+  implicit class ConvertForm(values: Map[String, String]) {
+    def toEntity(implicit options: RequestOption = HTTP.options):HttpEntity = {
+      new UrlEncodedFormEntity(values.map(kv => new BasicNameValuePair(kv._1, kv._2)).toList, options.encoding)
+    }
   }
 
-  implicit def entityConversion(file: java.io.File) = new {
-    def toEntity() = new FileEntity(file)
+  implicit def StringToEntity(value: String) = {
+    new StringEntity(value, ContentType.create("plain/text", HTTP.options.encoding))
+  }
+
+  implicit class StringConvertHelper(value: String) {
+    def toEntity(mimeType:String = "plain/text")(implicit options: RequestOption = HTTP.options) =
+      new StringEntity(value, ContentType.create(mimeType, options.encoding))
+
+    def toContentBody(mimeType:String = "plain/text")(implicit options: RequestOption = HTTP.options) =
+      new StringBody(value, ContentType.create(mimeType, options.encoding))
+  }
+
+  implicit class BytesConversionHelper(bytes: Array[Byte]) {
+    def toContentBody(filename: String) = new ByteArrayBody(bytes, filename)
+  }
+
+  implicit class FileConversionHelper(file: java.io.File) {
+    def toEntity(contentType:ContentType = ContentType.APPLICATION_OCTET_STREAM) =
+      new FileEntity(file, contentType)
+
+    def toContentBody(contentType:ContentType = ContentType.APPLICATION_OCTET_STREAM) =
+      new FileBody(file, contentType, file.getName)
   }
 
   implicit class UriSchema(protocol: String) {

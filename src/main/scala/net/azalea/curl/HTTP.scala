@@ -104,16 +104,16 @@ object HTTP {
   }
 
   /**
-   * PUT with HTTP Form.
+   * POST Command.
+   * @param url
+   * @param entity
+   * @param requestOption
+   * @return
    */
-  def putForm(url: String, pair:(String, String)*)(implicit requestOption: RequestOption = options): Response = {
-    putFormPairs(url, pair.map(kv => new BasicNameValuePair(kv._1, kv._2)).toList)
-  }
-
-  /**
-   * PUT with HTTP Form.
-   */
-  def putFormPairs(url: String, values: List[NameValuePair])(implicit requestOption: RequestOption = options): Response = {
-    put(url, new UrlEncodedFormEntity(values, requestOption.encoding))
+  def post(url:String, entity: HttpEntity)(implicit requestOption: RequestOption = options): Response = {
+    val setting = new HttpPost(url)
+    requestOption.inject(setting)
+    setting.setEntity(entity)
+    Response(withClient(setting, requestOption))
   }
 }

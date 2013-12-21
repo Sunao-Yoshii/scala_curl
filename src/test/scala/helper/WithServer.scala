@@ -8,7 +8,7 @@ abstract class WithServer(override val port: Int = 9100) extends BeforeAfter wit
 
   def servlet:Class[_ <: HttpServlet]
 
-  addServlet(servlet, "/*")
+  val holder = addServlet(servlet, "/*")
 
   def before = {
     this.start()

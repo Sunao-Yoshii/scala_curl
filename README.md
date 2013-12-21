@@ -5,7 +5,7 @@ scala_curl
 
 Only to use simply HTTP client access.
 
-method: `GET, PUT, DELETE`
+method: `GET, PUT, POST, DELETE`
 
 ## Install
 
@@ -48,23 +48,52 @@ method: `GET, PUT, DELETE`
   ```scala
     // PUT String contents.
     val response = HTTP.put("http://localhost/path/to", "SampleMessage".toEntity())
-
-    // PUT as form.
-    HTTP.putForm("http://localhost/path/to",
-      "param1" -> "value1",
-      "param2" -> "value2",
-      "paramN" -> "valueN"
-    )
   ```
 
-  Transmission in the multi-part can be performed by making use of the following libraries.
+### POST
 
   ```scala
-    import org.apache.http.entity.mime.content._
-    import org.apache.http.entity.mime.MultipartEntityBuilder
+    // POST String contents.
+    val response = HTTP.post("http://localhost/path/to", "SampleMessage".toEntity())
   ```
 
-  DSL is under construction.
+### DELETE
+
+  ```scala
+    val respond = HTTP.delete("http://localhost:9100/")
+  ```
+
+### Send String
+
+  ```scala
+    val response = HTTP.post("http://localhost/path/to", "SampleMessage".toEntity())
+  ```
+
+### Send File
+
+  ```scala
+    val file = new java.io.File("sample.txt")
+    val response = HTTP.post("http://localhost/path/to", file.toEntity())
+  ```
+
+### Send Form
+
+  ```scala
+    val respond = HTTP.post("http://localhost:9100/form", Map(
+      "param1" -> "value1",
+      "param2" -> "value2"
+    ).toEntity)
+  ```
+
+### Send multipart
+
+  ```scala
+      val respond = HTTP.post("http://localhost:9100/multipart", Map[String, ContentBody](
+        "param1" -> "value1".toContentBody(),
+        "param2" -> "value2".toContentBody(),
+        "file" -> file.toContentBody()
+      ).toEntity)
+  ```
 
 ### URL helper
 
