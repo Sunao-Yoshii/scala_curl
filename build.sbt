@@ -1,3 +1,5 @@
+organization := "net.white-azalea"
+
 name := "curl_scala"
 
 version := "0.1"
