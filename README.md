@@ -54,7 +54,7 @@ method: `GET, PUT, POST, DELETE`
 
   ```scala
     // POST String contents.
-    val response = HTTP.post("http://localhost/path/to", "SampleMessage".toEntity())
+    val response = HTTP.post("http://localhost/path/to", "SampleMessage")
   ```
 
 ### DELETE
@@ -66,14 +66,14 @@ method: `GET, PUT, POST, DELETE`
 ### Send String
 
   ```scala
-    val response = HTTP.post("http://localhost/path/to", "SampleMessage".toEntity())
+    val response = HTTP.post("http://localhost/path/to", "SampleMessage")
   ```
 
 ### Send File
 
   ```scala
     val file = new java.io.File("sample.txt")
-    val response = HTTP.post("http://localhost/path/to", file.toEntity())
+    val response = HTTP.post("http://localhost/path/to", file)
   ```
 
 ### Send Form
@@ -82,17 +82,17 @@ method: `GET, PUT, POST, DELETE`
     val respond = HTTP.post("http://localhost:9100/form", Map(
       "param1" -> "value1",
       "param2" -> "value2"
-    ).toEntity)
+    ))
   ```
 
 ### Send multipart
 
   ```scala
       val respond = HTTP.post("http://localhost:9100/multipart", Map[String, ContentBody](
-        "param1" -> "value1".toContentBody(),
-        "param2" -> "value2".toContentBody(),
-        "file" -> file.toContentBody()
-      ).toEntity)
+        "param1" -> "value1".toField(),
+        "param2" -> "value2".toField(),
+        "file" -> file.toField()
+      ))
   ```
 
 ### URL helper

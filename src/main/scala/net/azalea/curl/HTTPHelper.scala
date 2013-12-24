@@ -10,20 +10,16 @@ import org.apache.http.client.entity.UrlEncodedFormEntity
 import scala.collection.JavaConversions._
 
 object HTTPHelper {
-  implicit class ConvertMultipart(values: Map[String, ContentBody]) {
-    def toEntity():HttpEntity = {
-      val builder = MultipartEntityBuilder.create()
-      values.foreach {
-        case (k, v) => builder.addPart(k, v)
-      }
-      builder.build()
+  implicit def ConvertMultipart(values: Map[String, ContentBody]):HttpEntity = {
+    val builder = MultipartEntityBuilder.create()
+    values.foreach {
+      case (k, v) => builder.addPart(k, v)
     }
+    builder.build()
   }
 
-  implicit class ConvertForm(values: Map[String, String]) {
-    def toEntity(implicit options: RequestOption = HTTP.options):HttpEntity = {
-      new UrlEncodedFormEntity(values.map(kv => new BasicNameValuePair(kv._1, kv._2)).toList, options.encoding)
-    }
+  implicit def ConvertForm(values: Map[String, String])(implicit options: RequestOption = HTTP.options):HttpEntity = {
+    new UrlEncodedFormEntity(values.map(kv => new BasicNameValuePair(kv._1, kv._2)).toList, options.encoding)
   }
 
   implicit def StringToEntity(value: String) = {
@@ -31,22 +27,22 @@ object HTTPHelper {
   }
 
   implicit class StringConvertHelper(value: String) {
-    def toEntity(mimeType:String = "plain/text")(implicit options: RequestOption = HTTP.options) =
+    def toBody(mimeType:String = "plain/text")(implicit options: RequestOption = HTTP.options) =
       new StringEntity(value, ContentType.create(mimeType, options.encoding))
 
-    def toContentBody(mimeType:String = "plain/text")(implicit options: RequestOption = HTTP.options) =
+    def toField(mimeType:String = "plain/text")(implicit options: RequestOption = HTTP.options) =
       new StringBody(value, ContentType.create(mimeType, options.encoding))
   }
 
   implicit class BytesConversionHelper(bytes: Array[Byte]) {
-    def toContentBody(filename: String) = new ByteArrayBody(bytes, filename)
+    def toField(filename: String) = new ByteArrayBody(bytes, filename)
   }
 
   implicit class FileConversionHelper(file: java.io.File) {
     def toEntity(contentType:ContentType = ContentType.APPLICATION_OCTET_STREAM) =
       new FileEntity(file, contentType)
 
-    def toContentBody(contentType:ContentType = ContentType.APPLICATION_OCTET_STREAM) =
+    def toField(contentType:ContentType = ContentType.APPLICATION_OCTET_STREAM) =
       new FileBody(file, contentType, file.getName)
   }
 

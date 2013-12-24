@@ -68,7 +68,7 @@ class HTTPPostSpec extends Specification {
     import net.azalea.curl.HTTPHelper._
 
     """String content (using toEntity)""" in new SimpleMockServer {
-      val respond = HTTP.post("http://localhost:9100/reflect", "SampleMessage".toEntity())
+      val respond = HTTP.post("http://localhost:9100/reflect", "SampleMessage".toBody())
       respond.status mustEqual 200
       respond.bodyAsString() mustEqual "SampleMessage"
     }
@@ -89,17 +89,17 @@ class HTTPPostSpec extends Specification {
       val respond = HTTP.post("http://localhost:9100/form", Map(
         "param1" -> "value1",
         "param2" -> "value2"
-      ).toEntity)
+      ))
       respond.status mustEqual 200
       respond.bodyAsString() mustEqual "param1 : value1\nparam2 : value2"
     }
 
     "multipart" in new SimpleMockServer {
       val respond = HTTP.post("http://localhost:9100/multipart", Map[String, ContentBody](
-        "param1" -> "value1".toContentBody(),
-        "param2" -> "value2".toContentBody(),
-        "file" -> file.toContentBody()
-      ).toEntity)
+        "param1" -> "value1".toField(),
+        "param2" -> "value2".toField(),
+        "file" -> file.toField()
+      ))
       respond.status mustEqual 200
       respond.bodyAsString() mustEqual "param1 : value1\nparam2 : value2\nfile : sample.txt"
     }
