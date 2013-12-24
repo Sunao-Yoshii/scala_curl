@@ -47,7 +47,7 @@ method: `GET, PUT, POST, DELETE`
 
   ```scala
     // PUT String contents.
-    val response = HTTP.put("http://localhost/path/to", "SampleMessage".toEntity())
+    val response = HTTP.put("http://localhost/path/to", "SampleMessage")
   ```
 
 ### POST

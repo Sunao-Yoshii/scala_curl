@@ -5,12 +5,10 @@ import org.apache.http.client.methods._
 import org.apache.http.protocol.HTTP._
 import org.apache.http._
 import org.apache.commons.io.IOUtils
-import scala.collection.JavaConversions._
-import org.apache.http.message.BasicNameValuePair
-import org.apache.http.client.entity.UrlEncodedFormEntity
 import java.nio.charset.Charset
 import org.apache.http.client.{CredentialsProvider, RedirectStrategy}
 import org.apache.http.client.protocol.HttpClientContext
+import scala.concurrent._
 
 case class Response(response: HttpResponse) {
   private lazy val statusLine = response.getStatusLine
@@ -78,6 +76,11 @@ object HTTP {
   }
 
   /**
+   * GET command.
+   */
+  def asyncGet(url: String)(implicit execctx: ExecutionContext, requestOption: RequestOption = HTTP.options): Future[Response] = future { get(url) }
+
+  /**
    * DELETE command.
    * @param url
    * @param requestOption
@@ -88,6 +91,11 @@ object HTTP {
     requestOption.inject(setting)
     Response(withClient(setting, requestOption))
   }
+
+  /**
+   * DELETE command.
+   */
+  def asyncDelete(url: String)(implicit execctx: ExecutionContext, requestOption: RequestOption = HTTP.options): Future[Response] = future { delete(url) }
 
   /**
    * PUT Command.
@@ -104,6 +112,11 @@ object HTTP {
   }
 
   /**
+   * PUT command.
+   */
+  def asyncPut(url:String, entity: HttpEntity)(implicit execctx: ExecutionContext, requestOption: RequestOption = HTTP.options): Future[Response] = future { put(url, entity) }
+
+  /**
    * POST Command.
    * @param url
    * @param entity
@@ -116,4 +129,9 @@ object HTTP {
     setting.setEntity(entity)
     Response(withClient(setting, requestOption))
   }
+
+  /**
+   * POST command.
+   */
+  def asyncPost(url:String, entity: HttpEntity)(implicit execctx: ExecutionContext, requestOption: RequestOption = HTTP.options): Future[Response] = future { post(url, entity) }
 }
